@@ -17,6 +17,8 @@ with a simple in memory database. (This project is having only API's, no fronten
 - **PUT /todo/:id**
 - **DELETE /todo/:id**
 
-- it includes Schema of the Todos having id (auto generated), description, completed
+## Notes
+- it includes Service, Controller, Exception Files etc
+- schema of the Todos, having id (auto generated), description, completed
 - having several functions and classes to check validation of the request
 - error handling exceptions
