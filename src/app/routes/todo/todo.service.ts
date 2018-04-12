@@ -1,0 +1,53 @@
+import { ToDoUnprocessableException, ToDoNotFoundException } from './todo.exceptions';
+import { isToDo, IToDo } from './todo.model';
+import { Component } from '@nestjs/common';
+
+@Component()
+export class ToDoService {
+
+  private todos: IToDo[] = [];
+  private idCounter: number = 0;
+
+  public getAllToDos(): IToDo[] {
+    return this.todos;
+  }
+
+  public addToDo(toDo: IToDo): void {
+    if (!isToDo(toDo)) {
+      throw new ToDoUnprocessableException();
+    }
+    toDo.id = this.idCounter;
+    this.todos.push(<IToDo> toDo);
+    this.idCounter++;
+  }
+
+  public getToDo(id: number): IToDo {
+    if (this.checkValidId(id)) {
+      throw new ToDoNotFoundException();
+    }
+      return this.todos[id];
+  }
+
+  public updateToDo(id: number, toDo: IToDo): void {
+    if (!isToDo(toDo)) {
+      throw new ToDoUnprocessableException();
+    }
+    if (this.isInvalidId(id)) {
+      throw new ToDoNotFoundException();
+    }
+    this.todos[id].description = toDo.description;
+    this.todos[id].completed = toDo.completed;
+  }
+
+  public deleteToDo(id: number): void {
+    if (this.isInvalidId(id)) {
+      throw new ToDoNotFoundException();
+    }
+    this.todos.splice(id, 1);
+  }
+
+  isInvalidId = function(id: number) {
+    return (id < 0 || id > this.todos.length);
+  }
+
+}
